@@ -3,7 +3,7 @@ name: Deploy to Narri Dev Org
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   deploy:
