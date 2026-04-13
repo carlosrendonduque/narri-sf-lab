@@ -1,0 +1,26 @@
+name: Deploy to Narri Dev Org
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install SF CLI
+        run: npm install -g @salesforce/cli
+
+      - name: Authenticate with Dev Org
+        run: |
+          echo "${{ secrets.NARRI_DEV_SFDX_AUTH_URL }}" > auth_url.txt
+          sf org login sfdx-url --sfdx-url-file auth_url.txt --alias narri-dev
+          rm auth_url.txt
+
+      - name: Deploy metadata
+        run: |
+          sf project deploy start --source-dir force-app --target-org narri-dev
